@@ -1,43 +1,77 @@
-# Spring Boot JWT Authentication API
+# Spring Boot Full Stack App (Java + Angular + JWT + H2)
 
-A simple REST API built with **Spring Boot**, **JWT-based authentication**, **H2 in-memory database**, and **Spring Security**.
+This is a full stack Spring Boot backend application that supports:
+
+- User Registration & Login
+- JWT Token-based Authentication
+- H2 In-memory Database Integration
+- Swagger UI for API Documentation
+- RESTful endpoints secured with Spring Security
+
+---
+
+## 🔧 Tech Stack
+
+- Java 17+
+- Spring Boot 3.x
+- Spring Security
+- Spring Data JPA
+- H2 Database
+- JWT (using `jjwt`)
+- Swagger/OpenAPI (`springdoc-openapi`)
+
+---
 
 ## 🚀 Features
 
-- User registration with password encryption
-- JWT-based login authentication
-- Protected endpoints requiring a valid JWT token
-- In-memory H2 database for quick testing
-- Compatible with Spring Boot 3.x / 6.x security standards
+- Register new users (`/api/register`)
+- Login and receive JWT token (`/api/login`)
+- Fetch all users (`/api/users`)
+- Delete user by name (`/api/user/{name}`)
+- JWT protection on private endpoints
+- View API docs with Swagger
 
 ---
 
-## 🛠 Technologies Used
+## 🛡️ Authentication
+
+Once logged in, you will receive a JWT token like:
+
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+Include it in `Authorization` header for all secure endpoints.
+
+Example header:
+
+Authorization: Bearer <your_token_here>
+---
+
+## 📂 API Endpoints
+
+| Method | Endpoint           | Description            | Auth Required |
+|--------|--------------------|------------------------|----------------|
+| POST   | `/api/register`    | Register a new user    | ❌ No          |
+| POST   | `/api/login`       | Login and get JWT token| ❌ No          |
+| GET    | `/api/users`       | Get list of users      | ✅ Yes         |
+| DELETE | `/api/user/{name}` | Delete user by name    | ✅ Yes         |
+
+---
+
+## 🚀 Run Locally
+
+### Prerequisites
 
 - Java 17+
-- Spring Boot
-- Spring Security
-- JWT (JJWT)
-- H2 Database
-- Maven
+- Maven 3.x
 
----
+### Steps
 
-## 🔐 API Endpoints
+```bash
+# Clone the repository
+git clone https://github.com/your-username/your-repo-name.git
 
-| Endpoint           | Method | Description                            | Auth Required |
-|--------------------|--------|----------------------------------------|----------------|
-| `/api/register`    | POST   | Register a new user                    | ❌ No          |
-| `/api/login`       | POST   | Authenticate and receive JWT token     | ❌ No          |
-| `/api/users`       | GET    | Get list of all users                  | ✅ Yes         |
-| `/api/user/{name}` | DELETE | Delete a user by name                  | ✅ Yes         |
-| `/h2-console`      | GET    | View H2 database console               | ❌ No          |
+# Navigate to project directory
+cd your-repo-name
 
----
-
-## 🧪 How to Run
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/your-repo-name.git
-   cd your-repo-name
+# Build and run
+mvn spring-boot:run

@@ -20,8 +20,14 @@ import com.learnfullstack.learn_springboot_aws_angular_ai.JWTUtil;
 import com.learnfullstack.learn_springboot_aws_angular_ai.pojo.Employee;
 import com.learnfullstack.learn_springboot_aws_angular_ai.service.EmployeeService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api")
+@Tag(name = "User Management", description = "Operations related to employee registration, login, and retrieval")
 public class LoginController {
 
 	@Autowired
@@ -35,22 +41,29 @@ public class LoginController {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
+	@Operation(method = "GET", summary = "Get All Registered Users", description = "Returns the list of all registered employees")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved user list") })
 	@GetMapping("/users")
 	public List<Employee> getUsers() {
 		return employeeService.getEmployee();
 	}
 
+	@Operation(summary = "Register a new user", description = "Registers a new employee in the system")
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "User registered successfully"),
+			@ApiResponse(responseCode = "409", description = "User already exists") })
 	@PostMapping("/register")
 	public ResponseEntity<String> registerUser(@RequestBody Employee employee) {
 		boolean created = employeeService.registerUser(employee, passwordEncoder);
 		if (created) {
-			return ResponseEntity.status(HttpStatus.CREATED)
-				.body("new user created" + employee.getName());
+			return ResponseEntity.status(HttpStatus.CREATED).body("new user created" + employee.getName());
 		} else {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("user already present");
 		}
 	}
 
+	@Operation(summary = "Authenticate user and return JWT", description = "Validates user credentials and returns JWT token")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Authentication successful"),
+			@ApiResponse(responseCode = "401", description = "Invalid credentials") })
 	@PostMapping("/login")
 	public ResponseEntity<String> checkLoggedInUser(@RequestBody Employee employee) {
 		try {
@@ -64,6 +77,9 @@ public class LoginController {
 
 	}
 
+	@Operation(summary = "Delete a user by name", description = "Deletes a user from the database by name")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "User deleted successfully"),
+			@ApiResponse(responseCode = "404", description = "User not found") })
 	@DeleteMapping("/user/{name}")
 	public ResponseEntity<String> deleteUser(@PathVariable String name) {
 		boolean checkUser = employeeService.deleteEmployee(name);
