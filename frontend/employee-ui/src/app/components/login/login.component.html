@@ -1,0 +1,44 @@
+<div style="max-width: 400px; margin: auto; padding-top: 50px">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-title>Login</mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            placeholder="Enter your Username"
+          />
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            Username is required
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            type="password"
+            placeholder="Enter your Password"
+          />
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="full-width"
+        >
+          Login
+        </button>
+        <div class="register-link">
+          <p>Don't have an account?</p>
+          <button mat-button color="accent" (click)="navigateToRegister()">Register</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</div>

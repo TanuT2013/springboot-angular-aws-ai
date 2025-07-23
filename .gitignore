@@ -40,3 +40,7 @@ build/
 
 # VS Code
 .vscode/
+
+/frontend/node_modules/
+
+/data/testdb.mv.db

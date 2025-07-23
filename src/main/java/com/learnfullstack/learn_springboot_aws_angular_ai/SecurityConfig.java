@@ -3,7 +3,10 @@ package com.learnfullstack.learn_springboot_aws_angular_ai;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,13 +34,22 @@ public class SecurityConfig {
     }
 
     @Bean
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+		provider.setUserDetailsService(employeeDetailsService);
+		provider.setPasswordEncoder(passwordEncoder());
+		return provider;
+	}
+
+	@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeHttpRequests().requestMatchers("/api/register", "/api/login", "/h2-console/**",
+		http.csrf().disable().authorizeHttpRequests().requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+				.requestMatchers("/api/register", "/api/login", "/h2-console/**",
 				"/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**",
 				"/v3/api-docs.yaml"
 		).permitAll().anyRequest().authenticated().and().sessionManagement()

@@ -67,6 +67,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseEntity<String> checkLoggedInUser(@RequestBody Employee employee) {
 		try {
+			System.out.println("loggedinUser Details" + employee.getName());
 			authManager
 					.authenticate(new UsernamePasswordAuthenticationToken(employee.getName(), employee.getPassword()));
 			String token = jwtUtil.generateToken(employee.getName());
